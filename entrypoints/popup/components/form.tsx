@@ -1,16 +1,19 @@
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import { Eye, EyeOff } from "lucide-react";
 import { useFormData } from "@/entrypoints/hooks/FormData";
 import { toast } from "react-hot-toast";
 export default function ApiCredentialsForm() {
   const { FormData, setFormData} = useFormData();
-  const [endpoint, setEndpoint] = useState(FormData?.endpoint);
-  const [apiKey, setApiKey] = useState(FormData?.apiKey);
+  const [endpoint, setEndpoint] = useState("");
+  const [apiKey, setApiKey] = useState("");
   const [showKey, setShowKey] = useState(false);
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
   const [error, setError] = useState("");
-
+ useEffect(()=>{
+    setEndpoint(FormData.endpoint);
+    setApiKey(FormData.apiKey);
+  },[FormData]);
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -29,18 +32,20 @@ export default function ApiCredentialsForm() {
 
   await chrome.storage.local.set({
     FormData: data
+  },()=>{
+    toast.success("Saved successfully!");
   });
+  
 
   setFormData(data);
-
-  setTimeout(()=>setSaving(false), 2000);
+  setSaving(false);
   setSaved(true);
-  setTimeout(()=>toast.success("Saved successfully!"), 2000);
-  setSaved(false);
-  setTimeout(()=>setEndpoint(""), 2000);
-  setTimeout(()=>setApiKey(""), 2000);
-  // setTimeout(() => setSaved(false), 2000);
-  };
+  setTimeout(()=>setSaved(false), 2000);
+  // setSaved(true);
+  // setTimeout(()=>toast.success("Saved successfully!"), 2000);
+  // setSaved(false);
+ 
+};
 console.log(FormData);
 
   return (
@@ -55,7 +60,7 @@ console.log(FormData);
           </label>
           <input
             id="endpoint"
-            type="text"
+            type="url"
             value={endpoint}
             onChange={(e) => setEndpoint(e.target.value)}
             placeholder="https://api.example.com"
