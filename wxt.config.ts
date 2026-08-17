@@ -5,6 +5,7 @@ export default defineConfig({
   modules: ['@wxt-dev/module-react'],
   manifest: ({ browser, manifestVersion, mode, command }) => {
     return {
+      extensionApi : "chrome",
       "manifest_version": 2,
       "name": "WordScope",
       "version": "1.0.0",

@@ -4,9 +4,10 @@ import ReactDOM from 'react-dom/client';
 import './style.css';
 // import form from './components/form';
 import Form from './components/form';
-
+import { Toaster } from 'react-hot-toast';
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
+    <Toaster />
     <Form />
   </React.StrictMode>,
 );
