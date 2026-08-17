@@ -11,6 +11,9 @@ export default defineConfig({
       "version": "1.0.0",
       "description": "A simple example of a WXT extension using React.",
       permissions: [
+        "activeTab",
+        "scripting",
+        "contextMenus",
         "storage",
         "tabs"],
     };
