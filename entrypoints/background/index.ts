@@ -11,24 +11,30 @@ export default defineBackground(() => {
             contexts: ["all"]
           });
     });
-    console.log("CONTENT SCRIPT LOADED");
+    console.log("BACKGROUND SCRIPT LOADED");
 
     chrome.runtime.onMessage.addListener((message) => {
       console.log("Received:", message);
     });
+
     chrome.contextMenus.onClicked.addListener((info,tab)=>{
       console.log("Menu clicked:", info.menuItemId);
-        if(info.menuItemId === "post"){
-          if(!tab?.id) return;
-            chrome.tabs.sendMessage(tab?.id!,{
-                action:"post"
-            });
-        }
-        else if(info.menuItemId === "comment"){
-            if(!tab?.id) return;
-            chrome.tabs.sendMessage(tab?.id!,{
-                action:"comment"
-            });
-        }
+
+      if(!tab?.id) return;
+
+      if(info.menuItemId === "post"){
+          chrome.tabs.sendMessage(tab.id,{
+              action:"post"
+          }).catch((err) => {
+              console.warn("[WordScope] Could not reach content script - reload the page and try again:", err.message);
+          });
+      }
+      else if(info.menuItemId === "comment"){
+          chrome.tabs.sendMessage(tab.id,{
+              action:"comment"
+          }).catch((err) => {
+              console.warn("[WordScope] Could not reach content script - reload the page and try again:", err.message);
+          });
+      }
     });
 });
