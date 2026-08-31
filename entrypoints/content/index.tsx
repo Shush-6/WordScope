@@ -3,6 +3,7 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import { CreateContentElement } from "./common";
 import Header from "./common/header";
+import PostModal from "./post";
 
 export default defineContentScript({
   matches: ["<all_urls>"],
@@ -35,7 +36,7 @@ const createUi = (ctx: any,message: string) => {
           root?.unmount();
           app.remove();
         }
-        return <Header title={message} count={10} onRemove={onRemove} />
+        return <PostModal posts={[]} onRemove={onRemove} />
   }) as ReactDOM.Root;
   },
     onRemove: (root) => root?.unmount(),

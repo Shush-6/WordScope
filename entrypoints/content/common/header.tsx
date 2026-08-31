@@ -22,7 +22,6 @@ export default function Header({
                     onClick={onRemove}
                     className="text-red-500 hover:text-red-700 focus:outline-none"
                 >
-                    // svg used for disp;laying 2d graphics on wweb page
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
                         className="h-5 w-5"
