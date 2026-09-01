@@ -8,14 +8,47 @@ export default function Header({
   onRemove: () => void;
 }) {
   return (
-    <div className="w-full px-4 py-3 flex items-center justify-between bg-gray-800 border-b border-gray-700">
-      
-      <div className="flex items-center gap-2">
-        <h2 className="text-lg font-semibold text-white">
+    <div
+      style={{
+        width: "100%",
+        height: "60px",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "space-between",
+        padding: "0 16px",
+        boxSizing: "border-box",
+        backgroundColor: "#1f2937",
+        borderBottom: "1px solid #374151",
+      }}
+    >
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          gap: "8px",
+        }}
+      >
+        <h2
+          style={{
+            margin: 0,
+            color: "white",
+            fontSize: "18px",
+            fontWeight: 600,
+          }}
+        >
           {title}
         </h2>
 
-        <span className="bg-blue-100 text-blue-800 text-sm font-medium px-2.5 py-0.5 rounded-full">
+        <span
+          style={{
+            backgroundColor: "#dbeafe",
+            color: "#1e40af",
+            padding: "2px 10px",
+            borderRadius: "999px",
+            fontSize: "14px",
+            fontWeight: 500,
+          }}
+        >
           {count}
         </span>
       </div>
@@ -23,24 +56,22 @@ export default function Header({
       <button
         type="button"
         onClick={onRemove}
-        className="flex items-center justify-center w-8 h-8 text-gray-400 hover:text-white hover:bg-gray-700 rounded-full"
+        style={{
+          width: "32px",
+          height: "32px",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          border: "none",
+          borderRadius: "50%",
+          backgroundColor: "transparent",
+          color: "white",
+          fontSize: "22px",
+          cursor: "pointer",
+        }}
       >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          className="w-5 h-5"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-          strokeWidth={2}
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            d="M6 18L18 6M6 6l12 12"
-          />
-        </svg>
+        ×
       </button>
-
     </div>
   );
 }

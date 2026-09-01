@@ -77,29 +77,33 @@ export function extractRedditCommentsFromDOM(): IComment[] {
   const commentData: IComment[] = [];
 
   commentElements.forEach((el) => {
-    const author =
-      el.getAttribute("author") || "Anonymous";
+    // 1. Author attribute
+    const author = el.getAttribute("author") || "Anonymous";
 
-    const score =
-      el.getAttribute("score") || "0";
+    // 2. Score attribute
+    const score = el.getAttribute("score") || "0";
 
-    const relativePermalink =
-      el.getAttribute("permalink");
-
-    const permalink = relativePermalink
-      ? `https://www.reddit.com${relativePermalink}`
-      : "";
-
+    // 3. ID / thingid attribute
     const id =
       el.getAttribute("thingid") ||
       el.getAttribute("id") ||
       "";
 
+    // 4. Permalink construction
+    const relativePermalink = el.getAttribute("permalink");
+    const permalink = relativePermalink
+      ? `https://www.reddit.com${relativePermalink}`
+      : "";
+
+    // 5. Extract Comment Content
+    // Prefers slot="comment" content; falls back to paragraph text or overall content container text
+    const commentContainer =
+      el.querySelector('[slot="comment"]') ||
+      el.querySelector('[id*="-comment-rtjson-content"]');
+
     const commentBody =
-      el.querySelector('[slot="comment"]')
-        ?.textContent?.trim() ||
-      el.querySelector("p")
-        ?.textContent?.trim() ||
+      commentContainer?.textContent?.trim() ||
+      el.querySelector("p")?.textContent?.trim() ||
       "";
 
     commentData.push({

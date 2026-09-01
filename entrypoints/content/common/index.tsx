@@ -4,15 +4,12 @@ import { Toaster } from "react-hot-toast";
 
 export const CreateContentElement = (
   uiContainer: HTMLElement,
-  shadowContainer: HTMLElement,
   callback: (
     root: ReactDOM.Root,
     app: HTMLElement
   ) => React.ReactNode
 ): ReactDOM.Root => {
   const app = document.createElement("div");
-
-  uiContainer.append(app);
 
   Object.assign(app.style, {
     position: "fixed",
@@ -25,13 +22,12 @@ export const CreateContentElement = (
     justifyContent: "center",
     alignItems: "center",
 
-    backgroundColor: "rgba(0, 0, 0, 0.5)",
+    backgroundColor: "rgba(0, 0, 0, 0.6)",
 
     zIndex: "2147483647",
-
-    visibility: "visible",
-    pointerEvents: "auto",
   });
+
+  uiContainer.appendChild(app);
 
   const root = ReactDOM.createRoot(app);
 

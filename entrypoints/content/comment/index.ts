@@ -1,89 +1,95 @@
-import React, { useState } from "react";
-import ReactMarkdown from "react-markdown";
+import React from "react";
 import Header from "../common/header";
+import type { IComment, IPost } from "../scripts/scrap";
 
 export default function CommentModal({
   posts,
   comments,
   onRemove,
 }: {
-  posts: any;
-  comments: any;
+  posts: IPost[];
+  comments: IComment[];
   onRemove: () => void;
 }) {
-  const [loading] = useState(false);
-
-  const commentData = [
-    {
-      id: 1,
-      author: "Technology",
-      comment: "Revolution",
-      score: 450,
-    },
-  ];
-
-  const markdownContent = `
-Hello world!
-
-- Item 1
-- Item 2
-- Item 3
-`;
-
   return React.createElement(
     "div",
-    { className: "dark bg-gray-900 w-[700px]" },
+    {
+      style: {
+        width: "700px",
+        maxHeight: "700px",
+        backgroundColor: "#111827",
+        borderRadius: "8px",
+        overflow: "hidden",
+        boxShadow: "0 10px 30px rgba(0,0,0,0.5)",
+      },
+    },
+    React.createElement(Header, {
+      title: "Comments Insights",
+      count: comments.length,
+      onRemove,
+    }),
     React.createElement(
       "div",
       {
-        id: "reddit-modal",
-        className: "bg-card dark:bg-card-dark rounded-lg shadow-lg p-4",
+        style: {
+          maxHeight: "640px",
+          overflowY: "auto",
+          padding: "16px",
+        },
       },
-      React.createElement(Header, {
-        title: "Comments Insights",
-        count: commentData.length,
-        onRemove,
-      }),
-      loading &&
+      comments.map((comment) =>
         React.createElement(
-          "p",
-          { className: "text-gray-500 dark:text-gray-400" },
-          "Loading..."
-        ),
-      React.createElement(
-        "div",
-        { className: "overflow-y-auto p-4 text-gray-700 dark:text-gray-300" },
-        React.createElement(ReactMarkdown, null, markdownContent)
-      ),
-      React.createElement(
-        "div",
-        { className: "px-2 flex-1 overflow-auto" },
-        ...commentData.map((comment: any) =>
+          "div",
+          {
+            key: comment.id,
+            style: {
+              backgroundColor: "#1f2937",
+              borderRadius: "8px",
+              padding: "16px",
+              marginBottom: "16px",
+            },
+          },
           React.createElement(
             "div",
             {
-              key: comment.id,
-              className: "bg-gray-100 dark:bg-gray-800 rounded-lg shadow-md p-4 mb-4",
+              style: {
+                display: "flex",
+                justifyContent: "space-between",
+                marginBottom: "8px",
+              },
             },
             React.createElement(
-              "div",
-              { className: "flex items-center justify-between mb-2" },
-              React.createElement(
-                "span",
-                { className: "font-semibold text-sm text-gray-500 dark:text-gray-400" },
-                comment.author
-              ),
-              React.createElement(
-                "span",
-                { className: "text-sm text-gray-500 dark:text-gray-400" },
-                `Score: ${comment.score}`
-              )
+              "span",
+              {
+                style: {
+                  color: "#9ca3af",
+                  fontSize: "14px",
+                  fontWeight: 600,
+                },
+              },
+              comment.author
             ),
             React.createElement(
-              "p",
-              { className: "text-gray-700 dark:text-gray-300" },
-              comment.comment
+              "span",
+              {
+                style: {
+                  color: "#9ca3af",
+                  fontSize: "14px",
+                },
+              },
+              `Score: ${comment.score}`
             )
+          ),
+          React.createElement(
+            "p",
+            {
+              style: {
+                color: "#d1d5db",
+                margin: 0,
+                lineHeight: "1.5",
+              },
+            },
+            comment.comment
           )
         )
       )

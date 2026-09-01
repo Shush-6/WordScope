@@ -7,7 +7,10 @@ import PostModal from "./post";
 import CommentModal from "./comment";
 
 import type { ContentScriptContext } from "#imports";
-import { extractRedditPostsFromDOM } from "./scripts/scrap";
+import {
+  extractRedditPostsFromDOM,
+  extractRedditCommentsFromDOM,
+} from "./scripts/scrap";
 
 export default defineContentScript({
   matches: ["<all_urls>"],
@@ -41,46 +44,42 @@ const createUi = (
     name: "post-element",
     position: "inline",
 
-    onMount: (
-      uiContainer,
-      shadow,
-      shadowContainer
-    ) => {
-      return CreateContentElement(
-        uiContainer,
-        shadowContainer,
-        (root, app) => {
-          const onRemove = () => {
-            root.unmount();
-            app.remove();
-          };
+    onMount: (uiContainer) => {
+  return CreateContentElement(
+    uiContainer,
+    (root, app) => {
+      const onRemove = () => {
+        root.unmount();
+        app.remove();
+      };
 
-          const posts = extractRedditPostsFromDOM();
+      const posts = extractRedditPostsFromDOM();
+      const comments = extractRedditCommentsFromDOM();
 
-          switch (type) {
-            case "post":
-              return (
-                <PostModal
-                  posts={posts}
-                  onRemove={onRemove}
-                />
-              );
+      switch (type) {
+        case "post":
+          return (
+            <PostModal
+              posts={posts}
+              onRemove={onRemove}
+            />
+          );
 
-            case "comment":
-              return (
-                <CommentModal
-                  comments={[]}
-                  posts={[]}
-                  onRemove={onRemove}
-                />
-              );
+        case "comment":
+          return (
+            <CommentModal
+              posts={posts}
+              comments={comments}
+              onRemove={onRemove}
+            />
+          );
 
-            default:
-              return null;
-          }
-        }
-      );
-    },
+        default:
+          return null;
+      }
+    }
+  );
+},
 
     onRemove: (root) => {
       root?.unmount();
