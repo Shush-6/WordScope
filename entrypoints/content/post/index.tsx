@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useFormData } from "@/entrypoints/hooks/FormData";
 import Header from "../common/header";
 import type { IPost } from "../scripts/scrap";
+import Search from "../common/search";
 
 export default function PostModal({
   posts,
@@ -12,7 +13,7 @@ export default function PostModal({
 }) {
   const { FormData } = useFormData();
   const [loading, setLoading] = useState(false);
-
+ 
  return (
   <div className="w-[700px] max-h-[700px] bg-gray-900 rounded-lg shadow-2xl overflow-hidden">
 
@@ -21,7 +22,7 @@ export default function PostModal({
       count={posts.length}
       onRemove={onRemove}
     />
-
+  <Search handleSearch={()=> {}}/>
     <div className="max-h-[620px] overflow-y-auto p-4">
       {posts.map((post) => (
         <div

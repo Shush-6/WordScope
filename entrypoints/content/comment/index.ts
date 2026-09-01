@@ -1,7 +1,7 @@
 import React from "react";
 import Header from "../common/header";
 import type { IComment, IPost } from "../scripts/scrap";
-
+import Search from "../common/search";
 export default function CommentModal({
   posts,
   comments,
@@ -28,6 +28,7 @@ export default function CommentModal({
       count: comments.length,
       onRemove,
     }),
+    React.createElement(Search, { handleSearch: () => {} }),
     React.createElement(
       "div",
       {
