@@ -1,10 +1,13 @@
 import "../popup/style.css";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import ReactDOM from "react-dom/client";
+
 import { CreateContentElement } from "./common";
 import PostModal from "./post";
 import CommentModal from "./comment";
+
 import type { ContentScriptContext } from "#imports";
+import { extractRedditPostsFromDOM } from "./scripts/scrap";
 
 export default defineContentScript({
   matches: ["<all_urls>"],
@@ -12,12 +15,18 @@ export default defineContentScript({
 
   async main(ctx) {
     chrome.runtime.onMessage.addListener(async (message) => {
-      if (message.action === "post" || message.action === "comment") {
+      if (
+        message.action === "post" ||
+        message.action === "comment"
+      ) {
         try {
           const ui = await createUi(ctx, message.action);
           ui.mount();
         } catch (err) {
-          console.error("[WordScope] Failed to mount UI:", err);
+          console.error(
+            "[WordScope] Failed to mount UI:",
+            err
+          );
         }
       }
     });
@@ -32,21 +41,27 @@ const createUi = (
     name: "post-element",
     position: "inline",
 
-    onMount: (uiContainer, shadow, shadowContainer) => {
+    onMount: (
+      uiContainer,
+      shadow,
+      shadowContainer
+    ) => {
       return CreateContentElement(
         uiContainer,
         shadowContainer,
         (root, app) => {
           const onRemove = () => {
-            root?.unmount();
+            root.unmount();
             app.remove();
           };
+
+          const posts = extractRedditPostsFromDOM();
 
           switch (type) {
             case "post":
               return (
                 <PostModal
-                  posts={[]}
+                  posts={posts}
                   onRemove={onRemove}
                 />
               );
@@ -64,9 +79,11 @@ const createUi = (
               return null;
           }
         }
-      ) as ReactDOM.Root;
+      );
     },
 
-    onRemove: (root) => root?.unmount(),
+    onRemove: (root) => {
+      root?.unmount();
+    },
   });
 };

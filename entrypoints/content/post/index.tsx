@@ -1,74 +1,54 @@
 import { useState } from "react";
 import { useFormData } from "@/entrypoints/hooks/FormData";
 import Header from "../common/header";
+import type { IPost } from "../scripts/scrap";
 
 export default function PostModal({
   posts,
   onRemove,
 }: {
-  posts: any;
+  posts: IPost[];
   onRemove: () => void;
 }) {
   const { FormData } = useFormData();
   const [loading, setLoading] = useState(false);
 
-  console.log("formData", FormData);
+ return (
+  <div className="w-[700px] max-h-[700px] bg-gray-900 rounded-lg shadow-2xl overflow-hidden">
 
-  const postData = [
-    {
-      id: 1,
-      tag: "Technology",
-      title: "Revolution",
-      description: "Explore",
-      score: 450,
-    },
-  ];
+    <Header
+      title="Post Insights"
+      count={posts.length}
+      onRemove={onRemove}
+    />
 
-  return (
-    <div className="dark bg-gray-900 w-[700px]">
-      <div
-        id="reddit-modal"
-        className="bg-card dark:bg-card-dark rounded-lg shadow-lg p-4"
-      >
-        <Header
-          title="Post Insights"
-          count={postData.length}
-          onRemove={onRemove}
-        />
+    <div className="max-h-[620px] overflow-y-auto p-4">
+      {posts.map((post) => (
+        <div
+          key={post.id}
+          className="bg-gray-800 rounded-lg p-4 mb-4"
+        >
+          <div className="text-sm text-gray-400 mb-2">
+            {post.tag}
+          </div>
 
-        {loading && (
-          <p className="text-gray-500 dark:text-gray-400">
-            Loading...
-          </p>
-        )}
+          <h3 className="text-lg font-semibold text-white mb-2">
+            {post.title}
+          </h3>
 
-        <div className="px-2 flex-1 overflow-auto">
-          {postData.map((post) => (
-            <div
-              key={post.id}
-              className="bg-gray-100 dark:bg-gray-800 rounded-lg shadow-md p-4 mb-4"
-            >
-              <div className="flex flex-col relative">
-                <div className="flex items-center space-x-2 text-xs text-gray-500 dark:text-gray-400">
-                  <span className="font-semibold">{post.tag}</span>
-                </div>
-              </div>
+          {post.description && (
+            <p className="text-gray-300 mb-3">
+              {post.description}
+            </p>
+          )}
 
-              <h3 className="text-lg font-semibold mb-2">
-                {post.title}
-              </h3>
-
-              <span className="text-gray-700 dark:text-gray-300">
-                {post.description}
-              </span>
-
-              <span className="block text-sm text-gray-500 dark:text-gray-400">
-                Score: {post.score}
-              </span>
-            </div>
-          ))}
+          <span className="text-sm text-gray-400">
+            Score: {post.score}
+          </span>
         </div>
-      </div>
+      ))}
     </div>
-  );
+
+  </div>
+);
 }
